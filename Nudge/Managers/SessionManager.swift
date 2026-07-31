@@ -3,9 +3,11 @@ import Combine
 
 
 class SessionManager: ObservableObject {
-    
+    let scheduler = Scheduler()
+    @Published var activityMonitor = ActivityMonitor()
     @Published var currentGoal: Goal?
     @Published var isRunning = false
+    @Published var appState: NudgeState = .idle
     @Published var elapsedTime: TimeInterval = 0
     
     
@@ -25,11 +27,13 @@ class SessionManager: ObservableObject {
         
         currentGoal = Goal(title: goal)
         isRunning = true
+        appState = .focused
         
         startDate = Date()
         elapsedTime = 0
-        
+        activityMonitor.update()
         saveSession()
+        scheduler.sessionStarted()
         startTimer()
     }
     
@@ -37,6 +41,7 @@ class SessionManager: ObservableObject {
     func stop() {
         
         isRunning = false
+        appState = .idle
         
         timer?.invalidate()
         timer = nil
@@ -60,10 +65,25 @@ class SessionManager: ObservableObject {
             
             DispatchQueue.main.async {
                 self.updateElapsedTime()
+                self.updateAppState()
             }
         }
     }
-    
+    private func updateAppState() {
+
+
+        if activityMonitor.idleTime > 300 {
+
+            appState = .idle
+
+        }
+        else {
+
+            appState = .focused
+
+        }
+
+    }
     
     private func updateElapsedTime() {
         

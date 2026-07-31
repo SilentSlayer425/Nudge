@@ -14,7 +14,11 @@ struct NudgeApp: App {
         }
         
         
-        MenuBarExtra("Nudge", systemImage: "brain.head.profile") {
+        MenuBarExtra(
+            "Nudge",
+            systemImage: session.appState.icon
+        )
+        {
             MenuBarView()
                 .environmentObject(session)
         }

@@ -10,25 +10,60 @@
 		32E3FCCC301D485400394F53 /* NudgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCCB301D485400394F53 /* NudgeApp.swift */; };
 		32E3FCCE301D485400394F53 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCCD301D485400394F53 /* ContentView.swift */; };
 		32E3FCE0301D4A4F00394F53 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCDF301D495F00394F53 /* SessionManager.swift */; };
-		32E3FCE1301D4B2600394F53 /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCDE301D494B00394F53 /* Goal.swift */; };
 		32E3FCE3301D4BC300394F53 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCE2301D4B8200394F53 /* MenuBarView.swift */; };
-		32E3FCE5301D4C6600394F53 /* SavedSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCE4301D4C6100394F53 /* SavedSession.swift */; };
+		32F9B3CC301D4F9100F57E1F /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3CB301D4F8D00F57E1F /* Scheduler.swift */; };
+		32F9B3D0301D51A400F57E1F /* GoalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3CF301D519D00F57E1F /* GoalEntryView.swift */; };
+		32F9B3D2301D51AF00F57E1F /* ActiveSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3D1301D51A700F57E1F /* ActiveSessionView.swift */; };
+		32F9B3D5301D51BD00F57E1F /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3D4301D51BB00F57E1F /* TimerView.swift */; };
+		32F9B3D7301D51C300F57E1F /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3D6301D51C000F57E1F /* SectionHeader.swift */; };
+		32F9B3D9301D51CB00F57E1F /* StatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3D8301D51C500F57E1F /* StatusBadge.swift */; };
+		32F9B3DB301D51D100F57E1F /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3DA301D51CD00F57E1F /* PrimaryButton.swift */; };
+		32F9B3F5301D534900F57E1F /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3F4301D534200F57E1F /* ActivityManager.swift */; };
+		32F9B3F7301D535000F57E1F /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3F6301D534C00F57E1F /* SettingsManager.swift */; };
+		32F9B402301D548900F57E1F /* MenuBarStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B401301D548400F57E1F /* MenuBarStatusView.swift */; };
+		32F9B407301D573400F57E1F /* ActivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3F8301D535900F57E1F /* ActivityMonitor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		32E3FCC8301D485400394F53 /* Nudge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nudge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32E3FCCB301D485400394F53 /* NudgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeApp.swift; sourceTree = "<group>"; };
 		32E3FCCD301D485400394F53 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		32E3FCDE301D494B00394F53 /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		32E3FCDF301D495F00394F53 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		32E3FCE2301D4B8200394F53 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
-		32E3FCE4301D4C6100394F53 /* SavedSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedSession.swift; sourceTree = "<group>"; };
+		32F9B3CB301D4F8D00F57E1F /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
+		32F9B3CF301D519D00F57E1F /* GoalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalEntryView.swift; sourceTree = "<group>"; };
+		32F9B3D1301D51A700F57E1F /* ActiveSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveSessionView.swift; sourceTree = "<group>"; };
+		32F9B3D4301D51BB00F57E1F /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		32F9B3D6301D51C000F57E1F /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
+		32F9B3D8301D51C500F57E1F /* StatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBadge.swift; sourceTree = "<group>"; };
+		32F9B3DA301D51CD00F57E1F /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
+		32F9B3F4301D534200F57E1F /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
+		32F9B3F6301D534C00F57E1F /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		32F9B3F8301D535900F57E1F /* ActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMonitor.swift; sourceTree = "<group>"; };
+		32F9B3F9301D536500F57E1F /* BatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryMonitor.swift; sourceTree = "<group>"; };
+		32F9B3FA301D536D00F57E1F /* ScreenCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCaptureService.swift; sourceTree = "<group>"; };
+		32F9B3FB301D538900F57E1F /* SleepMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepMonitor.swift; sourceTree = "<group>"; };
+		32F9B3FC301D538F00F57E1F /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		32F9B3FD301D539900F57E1F /* AIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIManager.swift; sourceTree = "<group>"; };
+		32F9B3FE301D53A100F57E1F /* ModelRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRouter.swift; sourceTree = "<group>"; };
+		32F9B3FF301D53A600F57E1F /* PromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilder.swift; sourceTree = "<group>"; };
+		32F9B401301D548400F57E1F /* MenuBarStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarStatusView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		32E3FCCA301D485400394F53 /* Nudge */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Nudge;
+			sourceTree = "<group>";
+		};
+		32F9B3E9301D52C500F57E1F /* Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		32F9B3EF301D52EC00F57E1F /* Resources */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -47,12 +82,13 @@
 		32E3FCBF301D485400394F53 = {
 			isa = PBXGroup;
 			children = (
-				32E3FCDC301D491D00394F53 /* Resources */,
-				32E3FCDB301D491600394F53 /* Services */,
-				32E3FCDA301D491000394F53 /* Managers */,
-				32E3FCD9301D490A00394F53 /* Models */,
-				32E3FCD8301D490400394F53 /* Views */,
 				32E3FCD7301D48FC00394F53 /* App */,
+				32F9B3E9301D52C500F57E1F /* Models */,
+				32E3FCD8301D490400394F53 /* Views */,
+				32E3FCDA301D491000394F53 /* Managers */,
+				32E3FCDB301D491600394F53 /* Services */,
+				32F9B3F0301D530400F57E1F /* AI */,
+				32F9B3EF301D52EC00F57E1F /* Resources */,
 				32E3FCC9301D485400394F53 /* Products */,
 				32E3FCCA301D485400394F53 /* Nudge */,
 			);
@@ -78,23 +114,21 @@
 		32E3FCD8301D490400394F53 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				32F9B3D1301D51A700F57E1F /* ActiveSessionView.swift */,
+				32F9B3CF301D519D00F57E1F /* GoalEntryView.swift */,
 				32E3FCE2301D4B8200394F53 /* MenuBarView.swift */,
+				32F9B400301D547800F57E1F /* Components */,
+				32F9B3D3301D51B500F57E1F /* Componets */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		32E3FCD9301D490A00394F53 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				32E3FCE4301D4C6100394F53 /* SavedSession.swift */,
-				32E3FCDE301D494B00394F53 /* Goal.swift */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		32E3FCDA301D491000394F53 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				32F9B3F6301D534C00F57E1F /* SettingsManager.swift */,
+				32F9B3F4301D534200F57E1F /* ActivityManager.swift */,
+				32F9B3CB301D4F8D00F57E1F /* Scheduler.swift */,
 				32E3FCDF301D495F00394F53 /* SessionManager.swift */,
 			);
 			path = Managers;
@@ -103,15 +137,42 @@
 		32E3FCDB301D491600394F53 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				32F9B3FC301D538F00F57E1F /* NotificationService.swift */,
+				32F9B3FB301D538900F57E1F /* SleepMonitor.swift */,
+				32F9B3FA301D536D00F57E1F /* ScreenCaptureService.swift */,
+				32F9B3F9301D536500F57E1F /* BatteryMonitor.swift */,
+				32F9B3F8301D535900F57E1F /* ActivityMonitor.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
 		};
-		32E3FCDC301D491D00394F53 /* Resources */ = {
+		32F9B3D3301D51B500F57E1F /* Componets */ = {
 			isa = PBXGroup;
 			children = (
+				32F9B3DA301D51CD00F57E1F /* PrimaryButton.swift */,
+				32F9B3D8301D51C500F57E1F /* StatusBadge.swift */,
+				32F9B3D6301D51C000F57E1F /* SectionHeader.swift */,
+				32F9B3D4301D51BB00F57E1F /* TimerView.swift */,
 			);
-			path = Resources;
+			path = Componets;
+			sourceTree = "<group>";
+		};
+		32F9B3F0301D530400F57E1F /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				32F9B3FF301D53A600F57E1F /* PromptBuilder.swift */,
+				32F9B3FE301D53A100F57E1F /* ModelRouter.swift */,
+				32F9B3FD301D539900F57E1F /* AIManager.swift */,
+			);
+			path = AI;
+			sourceTree = "<group>";
+		};
+		32F9B400301D547800F57E1F /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				32F9B401301D548400F57E1F /* MenuBarStatusView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -131,6 +192,8 @@
 			);
 			fileSystemSynchronizedGroups = (
 				32E3FCCA301D485400394F53 /* Nudge */,
+				32F9B3E9301D52C500F57E1F /* Models */,
+				32F9B3EF301D52EC00F57E1F /* Resources */,
 			);
 			name = Nudge;
 			packageProductDependencies = (
@@ -188,11 +251,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				32E3FCE1301D4B2600394F53 /* Goal.swift in Sources */,
+				32F9B3CC301D4F9100F57E1F /* Scheduler.swift in Sources */,
+				32F9B3D2301D51AF00F57E1F /* ActiveSessionView.swift in Sources */,
+				32F9B402301D548900F57E1F /* MenuBarStatusView.swift in Sources */,
 				32E3FCCE301D485400394F53 /* ContentView.swift in Sources */,
+				32F9B3D9301D51CB00F57E1F /* StatusBadge.swift in Sources */,
+				32F9B3D5301D51BD00F57E1F /* TimerView.swift in Sources */,
+				32F9B3F7301D535000F57E1F /* SettingsManager.swift in Sources */,
+				32F9B407301D573400F57E1F /* ActivityMonitor.swift in Sources */,
 				32E3FCCC301D485400394F53 /* NudgeApp.swift in Sources */,
+				32F9B3D0301D51A400F57E1F /* GoalEntryView.swift in Sources */,
+				32F9B3F5301D534900F57E1F /* ActivityManager.swift in Sources */,
 				32E3FCE0301D4A4F00394F53 /* SessionManager.swift in Sources */,
-				32E3FCE5301D4C6600394F53 /* SavedSession.swift in Sources */,
+				32F9B3D7301D51C300F57E1F /* SectionHeader.swift in Sources */,
+				32F9B3DB301D51D100F57E1F /* PrimaryButton.swift in Sources */,
 				32E3FCE3301D4BC300394F53 /* MenuBarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
