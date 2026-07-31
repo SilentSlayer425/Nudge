@@ -61,8 +61,7 @@ struct ActiveSessionView: View {
 
 
             Text(
-                session.activityMonitor.currentApplication
-            )
+                session.contextManager.activityMonitor.currentApplication            )
             .foregroundStyle(.secondary)
 
 
@@ -77,16 +76,28 @@ struct ActiveSessionView: View {
             Text(activityStatus)
                 .foregroundStyle(.secondary)
 
+            Divider()
+
+
+            Text("Battery")
+                .font(.headline)
+
+
+            Text(
+                "\(Int(session.contextManager.batteryMonitor.batteryLevel))%"
+            )
+            .foregroundStyle(.secondary)
+            
+            
+            
         }
         .padding(40)
-
     }
-
-
 
     private var activityStatus: String {
 
-        let idle = session.activityMonitor.idleTime
+        let idle =
+        session.contextManager.activityMonitor.idleTime
 
 
         if idle < 60 {
@@ -104,5 +115,4 @@ struct ActiveSessionView: View {
         }
 
     }
-
 }

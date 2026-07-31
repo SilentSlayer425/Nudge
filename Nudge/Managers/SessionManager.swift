@@ -4,7 +4,7 @@ import Combine
 
 class SessionManager: ObservableObject {
     let scheduler = Scheduler()
-    @Published var activityMonitor = ActivityMonitor()
+    @Published var contextManager = ContextManager()
     @Published var currentGoal: Goal?
     @Published var isRunning = false
     @Published var appState: NudgeState = .idle
@@ -31,7 +31,7 @@ class SessionManager: ObservableObject {
         
         startDate = Date()
         elapsedTime = 0
-        activityMonitor.update()
+        contextManager.activityMonitor.update()
         saveSession()
         scheduler.sessionStarted()
         startTimer()
@@ -72,7 +72,26 @@ class SessionManager: ObservableObject {
     private func updateAppState() {
 
 
-        if activityMonitor.idleTime > 300 {
+        let battery =
+        contextManager.batteryMonitor.batteryLevel
+
+
+        let charging =
+        contextManager.batteryMonitor.isCharging
+
+
+
+        if battery < 15 && !charging {
+
+            appState = .standby
+
+            return
+
+        }
+
+
+
+        if contextManager.activityMonitor.idleTime > 300 {
 
             appState = .idle
 
