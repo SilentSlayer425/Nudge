@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		325C9CB6301D702B00F43661 /* ScreenCaptureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3FA301D536D00F57E1F /* ScreenCaptureService.swift */; };
+		325C9CB8301D738300F43661 /* OllamaClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325C9CB7301D737000F43661 /* OllamaClient.swift */; };
+		325C9CBD301D742C00F43661 /* FocusAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325C9CBC301D73A100F43661 /* FocusAnalyzer.swift */; };
 		32E3FCCC301D485400394F53 /* NudgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCCB301D485400394F53 /* NudgeApp.swift */; };
 		32E3FCCE301D485400394F53 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCCD301D485400394F53 /* ContentView.swift */; };
 		32E3FCE0301D4A4F00394F53 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCDF301D495F00394F53 /* SessionManager.swift */; };
@@ -30,6 +33,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		325C9CB7301D737000F43661 /* OllamaClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaClient.swift; sourceTree = "<group>"; };
+		325C9CBC301D73A100F43661 /* FocusAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAnalyzer.swift; sourceTree = "<group>"; };
+		325C9CC0301D78FA00F43661 /* DecisionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionParser.swift; sourceTree = "<group>"; };
 		32E3FCC8301D485400394F53 /* Nudge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nudge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32E3FCCB301D485400394F53 /* NudgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeApp.swift; sourceTree = "<group>"; };
 		32E3FCCD301D485400394F53 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -59,9 +65,22 @@
 		32F9B40F301D69DE00F57E1F /* CheckPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPermissionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		325C9CBF301D77C000F43661 /* Exceptions for "Nudge" folder in "Nudge" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 32E3FCC7301D485400394F53 /* Nudge */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		32E3FCCA301D485400394F53 /* Nudge */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				325C9CBF301D77C000F43661 /* Exceptions for "Nudge" folder in "Nudge" target */,
+			);
 			path = Nudge;
 			sourceTree = "<group>";
 		};
@@ -173,6 +192,9 @@
 		32F9B3F0301D530400F57E1F /* AI */ = {
 			isa = PBXGroup;
 			children = (
+				325C9CC0301D78FA00F43661 /* DecisionParser.swift */,
+				325C9CBC301D73A100F43661 /* FocusAnalyzer.swift */,
+				325C9CB7301D737000F43661 /* OllamaClient.swift */,
 				32F9B3FF301D53A600F57E1F /* PromptBuilder.swift */,
 				32F9B3FE301D53A100F57E1F /* ModelRouter.swift */,
 				32F9B3FD301D539900F57E1F /* AIManager.swift */,
@@ -257,6 +279,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				32F9B3CC301D4F9100F57E1F /* Scheduler.swift in Sources */,
+				325C9CB6301D702B00F43661 /* ScreenCaptureService.swift in Sources */,
+				325C9CBD301D742C00F43661 /* FocusAnalyzer.swift in Sources */,
 				32F9B3D2301D51AF00F57E1F /* ActiveSessionView.swift in Sources */,
 				32F9B402301D548900F57E1F /* MenuBarStatusView.swift in Sources */,
 				32E3FCCE301D485400394F53 /* ContentView.swift in Sources */,
@@ -275,6 +299,7 @@
 				32F9B40C301D627500F57E1F /* InfoRow.swift in Sources */,
 				32F9B3D7301D51C300F57E1F /* SectionHeader.swift in Sources */,
 				32F9B3DB301D51D100F57E1F /* PrimaryButton.swift in Sources */,
+				325C9CB8301D738300F43661 /* OllamaClient.swift in Sources */,
 				32E3FCE3301D4BC300394F53 /* MenuBarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -411,11 +436,12 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MTA76T92V4;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Nudge/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -443,11 +469,12 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MTA76T92V4;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Nudge/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

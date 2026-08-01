@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 struct ActiveSessionView: View {
 
@@ -152,6 +153,82 @@ struct ActiveSessionView: View {
                         width: 550
                     )
 
+                    Button("Test AI") {
+
+                        Task {
+
+                            guard let context =
+                                session.contextManager.context
+                            else {
+
+                                print("❌ No context available")
+
+                                return
+
+                            }
+
+
+                            print("✅ Context found:")
+                            print(context)
+
+
+                            do {
+
+                                let result =
+                                try await FocusAnalyzer()
+                                    .analyze(
+                                        context: context
+                                    )
+
+
+                                print("🤖 AI RESPONSE:")
+                                print(result)
+
+                            }
+                            catch {
+
+                                print("❌ AI ERROR:")
+                                print(error)
+
+                            }
+
+                        }
+
+                    }
+                    
+                    
+                    Button("Capture Test Screenshot") {
+
+
+                        Task {
+
+                            await session
+                                .contextManager
+                                .screenCapture
+                                .captureScreen()
+
+                        }
+
+
+                    }
+                    .buttonStyle(.bordered)
+                    
+                    if let image =
+                        session.contextManager
+                            .screenCapture
+                            .latestScreenshot {
+
+
+                        Image(
+                            nsImage: image
+                        )
+                        .resizable()
+                        .scaledToFit()
+                        .frame(
+                            width: 400
+                        )
+
+                    }
 
                     Button("End Session") {
 

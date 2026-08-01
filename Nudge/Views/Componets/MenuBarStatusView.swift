@@ -1,5 +1,5 @@
 import SwiftUI
-
+import Combine
 
 struct MenuBarStatusView: View {
 

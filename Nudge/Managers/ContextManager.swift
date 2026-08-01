@@ -8,7 +8,7 @@ class ContextManager: ObservableObject {
     @Published var context:
     FocusContext?
 
-
+    let screenCapture = ScreenCaptureService()
 
     let activityMonitor = ActivityMonitor()
 

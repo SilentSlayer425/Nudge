@@ -29,7 +29,7 @@ class SessionManager: ObservableObject {
         scheduler.start()
         isRunning = true
         appState = .focused
-        
+        contextManager.update(goal: currentGoal)
         startDate = Date()
         elapsedTime = 0
         contextManager.activityMonitor.update()
