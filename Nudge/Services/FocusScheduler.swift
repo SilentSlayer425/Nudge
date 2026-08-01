@@ -2,15 +2,19 @@ import Foundation
 import Combine
 
 
-class Scheduler: ObservableObject {
+class FocusScheduler: ObservableObject {
 
 
     @Published var nextCheck: Date?
 
 
 
-    private var interval:
-        TimeInterval = 300
+    private var timer: Timer?
+
+
+
+    var interval: TimeInterval = 300
+    // default 5 minutes
 
 
 
@@ -40,23 +44,18 @@ class Scheduler: ObservableObject {
 
     func focused() {
 
-
         if interval < 900 {
-
 
             scheduleNext(
                 seconds: interval + 300
             )
 
-
         }
         else {
-
 
             scheduleNext(
                 seconds: 900
             )
-
 
         }
 
@@ -66,11 +65,9 @@ class Scheduler: ObservableObject {
 
     func distracted() {
 
-
         scheduleNext(
             seconds: 300
         )
-
 
     }
 
@@ -78,9 +75,7 @@ class Scheduler: ObservableObject {
 
     func stop() {
 
-
         nextCheck = nil
-
 
     }
 

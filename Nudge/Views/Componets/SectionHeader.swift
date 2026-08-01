@@ -1,7 +1,16 @@
-//
-//  SectionHeader.swift
-//  Nudge
-//
-//  Created by Sai on 7/31/26.
-//
+import SwiftUI
 
+struct SectionHeader: View {
+
+    let title: String
+
+
+    var body: some View {
+
+        Text(title)
+            .font(.headline)
+            .fontWeight(.semibold)
+
+    }
+
+}

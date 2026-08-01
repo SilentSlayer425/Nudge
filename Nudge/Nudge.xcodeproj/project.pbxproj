@@ -24,6 +24,9 @@
 		32F9B407301D573400F57E1F /* ActivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3F8301D535900F57E1F /* ActivityMonitor.swift */; };
 		32F9B409301D5A3300F57E1F /* ContextManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B408301D5A2E00F57E1F /* ContextManager.swift */; };
 		32F9B40A301D5CC100F57E1F /* BatteryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3F9301D536500F57E1F /* BatteryMonitor.swift */; };
+		32F9B40C301D627500F57E1F /* InfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B40B301D627300F57E1F /* InfoRow.swift */; };
+		32F9B40E301D680B00F57E1F /* DeviceStateMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B40D301D67F100F57E1F /* DeviceStateMonitor.swift */; };
+		32F9B410301D69E400F57E1F /* CheckPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B40F301D69DE00F57E1F /* CheckPermissionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +54,9 @@
 		32F9B3FF301D53A600F57E1F /* PromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilder.swift; sourceTree = "<group>"; };
 		32F9B401301D548400F57E1F /* MenuBarStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarStatusView.swift; sourceTree = "<group>"; };
 		32F9B408301D5A2E00F57E1F /* ContextManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextManager.swift; sourceTree = "<group>"; };
+		32F9B40B301D627300F57E1F /* InfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoRow.swift; sourceTree = "<group>"; };
+		32F9B40D301D67F100F57E1F /* DeviceStateMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStateMonitor.swift; sourceTree = "<group>"; };
+		32F9B40F301D69DE00F57E1F /* CheckPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPermissionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -140,6 +146,8 @@
 		32E3FCDB301D491600394F53 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				32F9B40F301D69DE00F57E1F /* CheckPermissionManager.swift */,
+				32F9B40D301D67F100F57E1F /* DeviceStateMonitor.swift */,
 				32F9B3FC301D538F00F57E1F /* NotificationService.swift */,
 				32F9B3FB301D538900F57E1F /* SleepMonitor.swift */,
 				32F9B3FA301D536D00F57E1F /* ScreenCaptureService.swift */,
@@ -152,6 +160,7 @@
 		32F9B3D3301D51B500F57E1F /* Componets */ = {
 			isa = PBXGroup;
 			children = (
+				32F9B40B301D627300F57E1F /* InfoRow.swift */,
 				32F9B3DA301D51CD00F57E1F /* PrimaryButton.swift */,
 				32F9B3D8301D51C500F57E1F /* StatusBadge.swift */,
 				32F9B3D6301D51C000F57E1F /* SectionHeader.swift */,
@@ -253,6 +262,8 @@
 				32E3FCCE301D485400394F53 /* ContentView.swift in Sources */,
 				32F9B3D9301D51CB00F57E1F /* StatusBadge.swift in Sources */,
 				32F9B3D5301D51BD00F57E1F /* TimerView.swift in Sources */,
+				32F9B410301D69E400F57E1F /* CheckPermissionManager.swift in Sources */,
+				32F9B40E301D680B00F57E1F /* DeviceStateMonitor.swift in Sources */,
 				32F9B409301D5A3300F57E1F /* ContextManager.swift in Sources */,
 				32F9B40A301D5CC100F57E1F /* BatteryMonitor.swift in Sources */,
 				32F9B3F7301D535000F57E1F /* SettingsManager.swift in Sources */,
@@ -261,6 +272,7 @@
 				32F9B3D0301D51A400F57E1F /* GoalEntryView.swift in Sources */,
 				32F9B3F5301D534900F57E1F /* ActivityManager.swift in Sources */,
 				32E3FCE0301D4A4F00394F53 /* SessionManager.swift in Sources */,
+				32F9B40C301D627500F57E1F /* InfoRow.swift in Sources */,
 				32F9B3D7301D51C300F57E1F /* SectionHeader.swift in Sources */,
 				32F9B3DB301D51D100F57E1F /* PrimaryButton.swift in Sources */,
 				32E3FCE3301D4BC300394F53 /* MenuBarView.swift in Sources */,

@@ -26,6 +26,7 @@ class SessionManager: ObservableObject {
     func start(goal: String) {
         
         currentGoal = Goal(title: goal)
+        scheduler.start()
         isRunning = true
         appState = .focused
         
@@ -33,7 +34,7 @@ class SessionManager: ObservableObject {
         elapsedTime = 0
         contextManager.activityMonitor.update()
         saveSession()
-        scheduler.sessionStarted()
+        scheduler.start()
         startTimer()
     }
     
@@ -45,7 +46,7 @@ class SessionManager: ObservableObject {
         
         timer?.invalidate()
         timer = nil
-        
+        scheduler.stop()
         currentGoal = nil
         startDate = nil
         elapsedTime = 0

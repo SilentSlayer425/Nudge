@@ -9,16 +9,32 @@ class ContextManager: ObservableObject {
     FocusContext?
 
 
+
     let activityMonitor = ActivityMonitor()
 
+    let deviceStateMonitor = DeviceStateMonitor()
+
     let batteryMonitor = BatteryMonitor()
+
+
+
+    lazy var checkPermissionManager:
+        CheckPermissionManager =
+        CheckPermissionManager(
+            contextManager: self
+        )
+
+
 
     func update(goal: Goal?) {
 
 
         guard let goal else {
+
             return
+
         }
+
 
 
         context = FocusContext(
@@ -39,6 +55,7 @@ class ContextManager: ObservableObject {
 
             timestamp:
                 Date()
+
         )
 
     }
