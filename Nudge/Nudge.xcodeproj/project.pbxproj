@@ -10,6 +10,12 @@
 		325C9CB6301D702B00F43661 /* ScreenCaptureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3FA301D536D00F57E1F /* ScreenCaptureService.swift */; };
 		325C9CB8301D738300F43661 /* OllamaClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325C9CB7301D737000F43661 /* OllamaClient.swift */; };
 		325C9CBD301D742C00F43661 /* FocusAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325C9CBC301D73A100F43661 /* FocusAnalyzer.swift */; };
+		325C9CC1301D7A1E00F43661 /* AIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3FD301D539900F57E1F /* AIManager.swift */; };
+		325C9CC2301D7A2B00F43661 /* DecisionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325C9CC0301D78FA00F43661 /* DecisionParser.swift */; };
+		32AA0001301D53A100F57E1F /* ModelRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3FE301D53A100F57E1F /* ModelRouter.swift */; };
+		32AA0002301D53A600F57E1F /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3FF301D53A600F57E1F /* PromptBuilder.swift */; };
+		32AA0101301D9A0100F57E1F /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32AA0100301D99FA00F57E1F /* HistoryStore.swift */; };
+		32AA0102301D9A0500F57E1F /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3FC301D538F00F57E1F /* NotificationService.swift */; };
 		32E3FCCC301D485400394F53 /* NudgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCCB301D485400394F53 /* NudgeApp.swift */; };
 		32E3FCCE301D485400394F53 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCCD301D485400394F53 /* ContentView.swift */; };
 		32E3FCE0301D4A4F00394F53 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32E3FCDF301D495F00394F53 /* SessionManager.swift */; };
@@ -21,7 +27,6 @@
 		32F9B3D7301D51C300F57E1F /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3D6301D51C000F57E1F /* SectionHeader.swift */; };
 		32F9B3D9301D51CB00F57E1F /* StatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3D8301D51C500F57E1F /* StatusBadge.swift */; };
 		32F9B3DB301D51D100F57E1F /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3DA301D51CD00F57E1F /* PrimaryButton.swift */; };
-		32F9B3F5301D534900F57E1F /* ActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3F4301D534200F57E1F /* ActivityManager.swift */; };
 		32F9B3F7301D535000F57E1F /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3F6301D534C00F57E1F /* SettingsManager.swift */; };
 		32F9B402301D548900F57E1F /* MenuBarStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B401301D548400F57E1F /* MenuBarStatusView.swift */; };
 		32F9B407301D573400F57E1F /* ActivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9B3F8301D535900F57E1F /* ActivityMonitor.swift */; };
@@ -36,6 +41,7 @@
 		325C9CB7301D737000F43661 /* OllamaClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OllamaClient.swift; sourceTree = "<group>"; };
 		325C9CBC301D73A100F43661 /* FocusAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusAnalyzer.swift; sourceTree = "<group>"; };
 		325C9CC0301D78FA00F43661 /* DecisionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionParser.swift; sourceTree = "<group>"; };
+		32AA0100301D99FA00F57E1F /* HistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStore.swift; sourceTree = "<group>"; };
 		32E3FCC8301D485400394F53 /* Nudge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nudge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32E3FCCB301D485400394F53 /* NudgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NudgeApp.swift; sourceTree = "<group>"; };
 		32E3FCCD301D485400394F53 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -48,12 +54,10 @@
 		32F9B3D6301D51C000F57E1F /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 		32F9B3D8301D51C500F57E1F /* StatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBadge.swift; sourceTree = "<group>"; };
 		32F9B3DA301D51CD00F57E1F /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
-		32F9B3F4301D534200F57E1F /* ActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityManager.swift; sourceTree = "<group>"; };
 		32F9B3F6301D534C00F57E1F /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
 		32F9B3F8301D535900F57E1F /* ActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMonitor.swift; sourceTree = "<group>"; };
 		32F9B3F9301D536500F57E1F /* BatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryMonitor.swift; sourceTree = "<group>"; };
 		32F9B3FA301D536D00F57E1F /* ScreenCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCaptureService.swift; sourceTree = "<group>"; };
-		32F9B3FB301D538900F57E1F /* SleepMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepMonitor.swift; sourceTree = "<group>"; };
 		32F9B3FC301D538F00F57E1F /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		32F9B3FD301D539900F57E1F /* AIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIManager.swift; sourceTree = "<group>"; };
 		32F9B3FE301D53A100F57E1F /* ModelRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRouter.swift; sourceTree = "<group>"; };
@@ -155,7 +159,7 @@
 			children = (
 				32F9B408301D5A2E00F57E1F /* ContextManager.swift */,
 				32F9B3F6301D534C00F57E1F /* SettingsManager.swift */,
-				32F9B3F4301D534200F57E1F /* ActivityManager.swift */,
+				32AA0100301D99FA00F57E1F /* HistoryStore.swift */,
 				32F9B3CB301D4F8D00F57E1F /* Scheduler.swift */,
 				32E3FCDF301D495F00394F53 /* SessionManager.swift */,
 			);
@@ -168,7 +172,6 @@
 				32F9B40F301D69DE00F57E1F /* CheckPermissionManager.swift */,
 				32F9B40D301D67F100F57E1F /* DeviceStateMonitor.swift */,
 				32F9B3FC301D538F00F57E1F /* NotificationService.swift */,
-				32F9B3FB301D538900F57E1F /* SleepMonitor.swift */,
 				32F9B3FA301D536D00F57E1F /* ScreenCaptureService.swift */,
 				32F9B3F9301D536500F57E1F /* BatteryMonitor.swift */,
 				32F9B3F8301D535900F57E1F /* ActivityMonitor.swift */,
@@ -280,6 +283,7 @@
 			files = (
 				32F9B3CC301D4F9100F57E1F /* Scheduler.swift in Sources */,
 				325C9CB6301D702B00F43661 /* ScreenCaptureService.swift in Sources */,
+				32AA0102301D9A0500F57E1F /* NotificationService.swift in Sources */,
 				325C9CBD301D742C00F43661 /* FocusAnalyzer.swift in Sources */,
 				32F9B3D2301D51AF00F57E1F /* ActiveSessionView.swift in Sources */,
 				32F9B402301D548900F57E1F /* MenuBarStatusView.swift in Sources */,
@@ -288,19 +292,23 @@
 				32F9B3D5301D51BD00F57E1F /* TimerView.swift in Sources */,
 				32F9B410301D69E400F57E1F /* CheckPermissionManager.swift in Sources */,
 				32F9B40E301D680B00F57E1F /* DeviceStateMonitor.swift in Sources */,
+				325C9CC2301D7A2B00F43661 /* DecisionParser.swift in Sources */,
 				32F9B409301D5A3300F57E1F /* ContextManager.swift in Sources */,
+				325C9CC1301D7A1E00F43661 /* AIManager.swift in Sources */,
 				32F9B40A301D5CC100F57E1F /* BatteryMonitor.swift in Sources */,
 				32F9B3F7301D535000F57E1F /* SettingsManager.swift in Sources */,
+				32AA0101301D9A0100F57E1F /* HistoryStore.swift in Sources */,
 				32F9B407301D573400F57E1F /* ActivityMonitor.swift in Sources */,
 				32E3FCCC301D485400394F53 /* NudgeApp.swift in Sources */,
 				32F9B3D0301D51A400F57E1F /* GoalEntryView.swift in Sources */,
-				32F9B3F5301D534900F57E1F /* ActivityManager.swift in Sources */,
 				32E3FCE0301D4A4F00394F53 /* SessionManager.swift in Sources */,
 				32F9B40C301D627500F57E1F /* InfoRow.swift in Sources */,
 				32F9B3D7301D51C300F57E1F /* SectionHeader.swift in Sources */,
 				32F9B3DB301D51D100F57E1F /* PrimaryButton.swift in Sources */,
 				325C9CB8301D738300F43661 /* OllamaClient.swift in Sources */,
 				32E3FCE3301D4BC300394F53 /* MenuBarView.swift in Sources */,
+				32AA0001301D53A100F57E1F /* ModelRouter.swift in Sources */,
+				32AA0002301D53A600F57E1F /* PromptBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -107,7 +107,7 @@ struct ActiveSessionView: View {
 
                             StatusBadge(
                                 text: stateText,
-                                color: .green
+                                color: stateColor
                             )
 
 
@@ -153,50 +153,50 @@ struct ActiveSessionView: View {
                         width: 550
                     )
 
-                    Button("Test AI") {
+                    if let decision = session.lastDecision {
 
-                        Task {
+                        VStack(
+                            alignment: .leading,
+                            spacing: 10
+                        ) {
 
-                            guard let context =
-                                session.contextManager.context
-                            else {
-
-                                print("❌ No context available")
-
-                                return
-
-                            }
+                            SectionHeader(
+                                title: "Latest Check"
+                            )
 
 
-                            print("✅ Context found:")
-                            print(context)
+                            StatusBadge(
+                                text: decision.focused ? "On task" : "Distracted",
+                                color: decision.focused ? .green : .red
+                            )
 
 
-                            do {
-
-                                let result =
-                                try await FocusAnalyzer()
-                                    .analyze(
-                                        context: context
-                                    )
+                            InfoRow(
+                                title: "Confidence",
+                                value: "\(decision.confidence)%"
+                            )
 
 
-                                print("🤖 AI RESPONSE:")
-                                print(result)
+                            InfoRow(
+                                title: "Reason",
+                                value: decision.reason
+                            )
 
-                            }
-                            catch {
 
-                                print("❌ AI ERROR:")
-                                print(error)
-
-                            }
+                            InfoRow(
+                                title: "Source",
+                                value: sourceText(decision.source)
+                            )
 
                         }
+                        .frame(
+                            maxWidth: 500,
+                            alignment: .leading
+                        )
 
                     }
-                    
-                    
+
+
                     Button("Capture Test Screenshot") {
 
 
@@ -235,7 +235,7 @@ struct ActiveSessionView: View {
                         session.stop()
 
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.destructive)
 
 
                 }
@@ -271,6 +271,48 @@ struct ActiveSessionView: View {
 
         case .standby:
             return "Standby"
+
+        }
+
+    }
+
+
+    private var stateColor: Color {
+
+        switch session.appState {
+
+        case .focused:
+            return .green
+
+        case .idle:
+            return .secondary
+
+        case .checking:
+            return .yellow
+
+        case .distracted:
+            return .red
+
+        case .standby:
+            return .blue
+
+        }
+
+    }
+
+
+    private func sourceText(_ source: DecisionSource) -> String {
+
+        switch source {
+
+        case .policy:
+            return "Policy lookup"
+
+        case .model:
+            return "Model classification"
+
+        case .fallback:
+            return "Fallback (model unreachable)"
 
         }
 

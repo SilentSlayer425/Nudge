@@ -22,6 +22,16 @@ class DeviceStateMonitor: ObservableObject {
 
 
 
+    deinit {
+
+        DistributedNotificationCenter.default().removeObserver(self)
+
+        NSWorkspace.shared.notificationCenter.removeObserver(self)
+
+    }
+
+
+
     private func setupNotifications() {
 
 

@@ -4,29 +4,53 @@ import Combine
 
 class Scheduler: ObservableObject {
 
-
     @Published var nextCheck: Date?
 
+    private var timer: Timer?
+
+    var onCheck: (() -> Void)?
+
+    private var interval: TimeInterval = 300
+
+    private var minInterval: TimeInterval = 300
+
+    private var maxInterval: TimeInterval = 900
 
 
-    private var interval:
-        TimeInterval = 300
+    /// Bounds come from `SettingsManager` at the call site (Scheduler itself
+    /// isn't main-actor isolated, so it doesn't reach into that singleton
+    /// directly).
+    func start(minSeconds: TimeInterval, maxSeconds: TimeInterval) {
 
+        minInterval = minSeconds
+        maxInterval = maxSeconds
 
+        scheduleNext(seconds: minInterval)
 
-    func start() {
+        timer?.invalidate()
 
-        scheduleNext(
-            seconds: 300
-        )
+        timer = Timer.scheduledTimer(
+            withTimeInterval: 1,
+            repeats: true
+        ) { [weak self] _ in
 
+            guard let self else { return }
+
+            if let next = self.nextCheck,
+               Date() >= next {
+
+                self.onCheck?()
+
+                self.scheduleNext(
+                    seconds: self.interval
+                )
+            }
+        }
     }
 
 
 
-    func scheduleNext(
-        seconds: TimeInterval
-    ) {
+    func scheduleNext(seconds: TimeInterval) {
 
         interval = seconds
 
@@ -40,25 +64,9 @@ class Scheduler: ObservableObject {
 
     func focused() {
 
-
-        if interval < 900 {
-
-
-            scheduleNext(
-                seconds: interval + 300
-            )
-
-
-        }
-        else {
-
-
-            scheduleNext(
-                seconds: 900
-            )
-
-
-        }
+        scheduleNext(
+            seconds: min(interval + minInterval, maxInterval)
+        )
 
     }
 
@@ -66,11 +74,9 @@ class Scheduler: ObservableObject {
 
     func distracted() {
 
-
         scheduleNext(
-            seconds: 300
+            seconds: minInterval
         )
-
 
     }
 
@@ -78,11 +84,10 @@ class Scheduler: ObservableObject {
 
     func stop() {
 
+        timer?.invalidate()
+        timer = nil
 
         nextCheck = nil
-
-
     }
-
 
 }

@@ -1,7 +1,18 @@
 import Foundation
 
 
-struct FocusDecision: Codable {
+enum DecisionSource: String, Codable {
+
+    case policy
+
+    case model
+
+    case fallback
+
+}
+
+
+struct FocusDecision: Codable, Equatable {
 
 
     let focused: Bool
@@ -10,5 +21,6 @@ struct FocusDecision: Codable {
 
     let reason: String
 
+    let source: DecisionSource
 
 }

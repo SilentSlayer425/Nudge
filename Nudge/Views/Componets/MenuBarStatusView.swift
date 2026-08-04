@@ -5,6 +5,8 @@ struct MenuBarStatusView: View {
 
     @EnvironmentObject var session: SessionManager
 
+    @State private var goalText = ""
+
 
     var body: some View {
 
@@ -37,11 +39,7 @@ struct MenuBarStatusView: View {
 
             Label("Status", systemImage: "circle.fill")
 
-            Text(
-                session.isRunning
-                ? "Focused"
-                : "Idle"
-            )
+            Text(stateText)
 
 
             if session.isRunning {
@@ -76,6 +74,39 @@ struct MenuBarStatusView: View {
 
                 }
 
+
+                Divider()
+
+
+                Button("End Session") {
+
+                    session.stop()
+
+                }
+                .buttonStyle(.destructive)
+
+            } else {
+
+                Divider()
+
+
+                TextField(
+                    "What do you want to accomplish?",
+                    text: $goalText
+                )
+                .textFieldStyle(.roundedBorder)
+
+
+                Button("Start Focus Session") {
+
+                    session.start(goal: goalText)
+
+                    goalText = ""
+
+                }
+                .buttonStyle(.primary)
+                .disabled(goalText.isEmpty)
+
             }
 
 
@@ -93,9 +124,10 @@ struct MenuBarStatusView: View {
 
             Button("Settings") {
 
-                // later
+                // Placeholder — settings UI isn't built yet.
 
             }
+            .disabled(true)
 
 
             Button("Quit") {
@@ -107,6 +139,30 @@ struct MenuBarStatusView: View {
         }
         .padding()
         .frame(width: 260)
+
+    }
+
+
+    private var stateText: String {
+
+        switch session.appState {
+
+        case .focused:
+            return "Focused"
+
+        case .idle:
+            return "Idle"
+
+        case .checking:
+            return "Checking"
+
+        case .distracted:
+            return "Distracted"
+
+        case .standby:
+            return "Standby"
+
+        }
 
     }
 

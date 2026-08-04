@@ -4,6 +4,8 @@ struct GoalEntryView: View {
 
     @EnvironmentObject var session: SessionManager
 
+    @ObservedObject private var history = HistoryStore.shared
+
     @State private var goalText = ""
 
 
@@ -34,6 +36,7 @@ struct GoalEntryView: View {
                         session.start(goal: goalText)
 
                     }
+                    .buttonStyle(.primary)
                     .disabled(goalText.isEmpty)
 
                 }
@@ -63,7 +66,7 @@ struct GoalEntryView: View {
                                 .foregroundStyle(.secondary)
 
 
-                            Text("0")
+                            Text("\(history.completedSessions)")
                                 .font(.title2)
 
 
@@ -85,7 +88,7 @@ struct GoalEntryView: View {
                                 .foregroundStyle(.secondary)
 
 
-                            Text("--")
+                            Text(accuracyText)
                                 .font(.title2)
 
 
@@ -107,7 +110,7 @@ struct GoalEntryView: View {
                                 .foregroundStyle(.secondary)
 
 
-                            Text("--")
+                            Text(focusTimeText)
                                 .font(.title2)
 
 
@@ -132,6 +135,40 @@ struct GoalEntryView: View {
             maxWidth: .infinity,
             maxHeight: .infinity
         )
+
+    }
+
+
+    private var accuracyText: String {
+
+        guard let accuracy = history.focusAccuracy else {
+
+            return "--"
+
+        }
+
+        return "\(Int((accuracy * 100).rounded()))%"
+
+    }
+
+
+    private var focusTimeText: String {
+
+        let totalMinutes = Int(history.totalFocusTime) / 60
+
+
+        if totalMinutes < 60 {
+
+            return "\(totalMinutes)m"
+
+        }
+
+
+        let hours = totalMinutes / 60
+        let minutes = totalMinutes % 60
+
+
+        return "\(hours)h \(minutes)m"
 
     }
 

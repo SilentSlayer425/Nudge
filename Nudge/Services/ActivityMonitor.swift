@@ -25,6 +25,14 @@ class ActivityMonitor: ObservableObject {
 
 
 
+    deinit {
+
+        timer?.invalidate()
+
+    }
+
+
+
     func startMonitoring() {
 
         timer?.invalidate()
@@ -33,15 +41,25 @@ class ActivityMonitor: ObservableObject {
         timer = Timer.scheduledTimer(
             withTimeInterval: 5,
             repeats: true
-        ) { _ in
+        ) { [weak self] _ in
 
             DispatchQueue.main.async {
 
-                self.update()
+                self?.update()
 
             }
 
         }
+
+    }
+
+
+
+    func stopMonitoring() {
+
+        timer?.invalidate()
+
+        timer = nil
 
     }
 
