@@ -1,81 +1,73 @@
 # Nudge
 
-Nudge is a native macOS focus-session companion. You enter a goal, start a timed session, and Nudge collects lightweight local context—such as the frontmost app, mouse-idle time, battery state, and device lock/sleep state. It can send that context to a local Ollama model to assess whether you are working toward the goal.
+Nudge is a native SwiftUI focus companion for macOS. Start a session with a goal, and Nudge monitors the frontmost application, mouse-idle time, power state, and lock/sleep state. At scheduled intervals it uses a local Ollama model to determine whether the current app supports the goal, records the result locally, and can notify you when you are off track.
 
-> **Project status:** early prototype. The user interface and most monitoring services are present, but automatic AI checks, notifications, session statistics, and several decision-model types are not yet connected into a complete focus-check workflow.
+> **Status:** working early release. Automatic focus checks, adaptive scheduling, local history, notifications, and structured local-AI decisions are implemented. A settings screen, automated tests, a release pipeline, and vision/screenshot analysis are not yet implemented.
 
-## What is implemented
+## How it works
 
-### Focus sessions
+1. Enter a goal in the main window or menu bar and start a session.
+2. Nudge immediately creates a goal-specific focus policy with a local Ollama model. The policy lists likely on-task and distracting macOS apps and is cached locally for that normalized goal.
+3. A timer triggers a check every five minutes by default. Known apps are evaluated locally from the policy; an unknown app gets one structured local-model classification and is then learned into the policy cache.
+4. A focused result increases the next interval, up to 15 minutes. A distracted result resets it to five minutes, records history, and may send a rate-limited notification.
+5. Ending a session saves its duration to local history, sends a completion notification when authorized, and clears the resumable-session state.
 
-- A goal-entry screen accepts a non-empty goal and starts a focus session.
-- The active-session screen shows the goal, a live elapsed timer, the next scheduled check, and system/context status.
-- Session state is saved in `UserDefaults` as the goal, start date, and running flag. A running session is restored when the app launches again.
-- Ending a session stops the timer and scheduler, clears the active goal, and removes the saved session.
-- The app provides both a standard window and a menu-bar extra whose icon follows the current app state.
+## Current features
 
-### Activity and device context
+### Sessions, state, and scheduling
 
-- `ActivityMonitor` samples the frontmost macOS application and mouse-idle duration every five seconds.
-- `BatteryMonitor` reads the current power-source capacity and charging state using IOKit.
-- `DeviceStateMonitor` observes screen lock/unlock and Mac sleep/wake notifications.
-- `CheckPermissionManager` reports whether a check may run. Checks are disallowed while the Mac is locked or sleeping, or when battery level is below 15%.
-- `ContextManager` packages the active goal, current app, idle time, battery level, charging state, and timestamp as `FocusContext`.
+- The app has a main window and a menu-bar extra. Both can start or end a session; the menu-bar icon reflects the current state.
+- A running session persists its goal, start time, and running flag in `UserDefaults`, then restores on next launch.
+- `Scheduler` runs a one-second timer that fires real checks at the configured interval. Default minimum and maximum intervals are 300 and 900 seconds.
+- State precedence is: AI evaluation in progress (`checking`) → low non-charging battery (`standby`) → over five minutes mouse idle (`idle`) → most recent non-fallback AI verdict → `focused`.
+- The active-session view displays the current goal, elapsed time, next check, latest verdict, and system state.
 
-### Scheduling and states
+### Local AI focus decisions
 
-- Sessions initially schedule their next check for five minutes after start.
-- The scheduler can gradually extend the interval to a maximum of 15 minutes after a focused result, or reset it to five minutes after a distracted result.
-- The displayed app state becomes `standby` below 15% battery while not charging, `idle` after five minutes of mouse inactivity, and `focused` otherwise.
-- The active screen and menu-bar view show battery, activity, device state, and the permission-check status.
+- All AI traffic goes to the local Ollama API at `http://127.0.0.1:11434`; there is no cloud AI endpoint in the app.
+- The default model is configurable in `UserDefaults` and currently defaults to `qwen3.5:4b`.
+- Policy generation and unknown-app classification request JSON schema-conforming output, then map it to app models with confidence and reasoning.
+- A known policy match is a 100%-confidence local decision. Unknown apps are classified once and then added to the allow or block set for that goal.
+- If Ollama cannot be reached, the check is recorded as `unknown` with a fallback decision; Nudge does not treat it as either focused or distracted and leaves the interval unchanged.
 
-### Local AI and screen capture
+### Device context, privacy, and notifications
 
-- `FocusAnalyzer` builds a prompt from `FocusContext` and sends it to a local Ollama server.
-- `OllamaClient` calls `http://localhost:11434/api/generate` using the default model `qwen3:0.6b`, with streaming and model thinking disabled.
-- The active-session UI includes a **Test AI** button that prints the model response to Xcode’s console.
-- `ScreenCaptureService` uses ScreenCaptureKit to capture the first available display. The active-session UI includes a test button and previews the most recent screenshot.
+- `ActivityMonitor` checks the frontmost app and mouse-idle time every five seconds.
+- `BatteryMonitor` reads charging/percentage at startup, every 30 seconds during a session, and from IOKit power-source change notifications.
+- Checks are skipped when the Mac is asleep or locked, or when battery is below 15%. Battery below 15% while not charging also puts the UI in standby.
+- `DeviceStateMonitor` responds to screen lock/unlock and Mac sleep/wake notifications.
+- Nudge requests macOS notification authorization at session start. It can post a distraction notification no more often than once a minute and a completion notification when a session ends.
+- A manual test screen capture is available. There is also a JPEG capture helper for future vision-model work, but screenshots are not currently sent to Ollama.
 
-## Current app flow
+### Local history
 
-1. Launch Nudge and enter the outcome you want to focus on.
-2. Start a session. Nudge begins the elapsed-time timer, activity monitoring, context creation, and five-minute schedule.
-3. Review goal, timing, current app, activity, battery, device, and check-status information in the active session window or menu bar.
-4. Optionally use **Test AI** after Ollama is running, or **Capture Test Screenshot** after granting macOS screen-recording permission.
-5. End the session to clear its saved state.
+- Each non-skipped check is stored with its date, app, status, confidence, and reason.
+- Completed-session count and total duration are stored alongside the checks in `~/Library/Application Support/Nudge/history.json`.
+- The goal-entry screen calculates completed sessions, focus accuracy, and total focus time from that file. Up to 1,000 checks are retained.
 
 ## Requirements
 
-- macOS 26.5 or later (the project’s current deployment target).
-- Xcode with Swift 5 support.
-- Ollama only if you plan to use local AI analysis. Install a model named `qwen3:0.6b` and make sure the Ollama service is available at `localhost:11434`.
-- macOS Screen Recording permission to use screen capture. macOS may also request the relevant local-network/permission approvals for the app and Ollama setup.
+- macOS 26.5 or later, matching the project’s deployment target.
+- Xcode with Swift 5 support to build from source.
+- A running Ollama server and the selected model (the default is `qwen3.5:4b`) for policy generation and unknown-app decisions.
+- Screen Recording permission only when using the screenshot test or future JPEG capture.
+- Notification permission for distraction and completion alerts.
 
 ## Run locally
 
 1. Open [Nudge.xcodeproj](Nudge/Nudge.xcodeproj) in Xcode.
-2. Choose the **Nudge** scheme and a My Mac destination.
-3. Build and run the app.
-4. For local AI testing, start Ollama and pull the configured model before selecting **Test AI**.
+2. Select the **Nudge** scheme and a **My Mac** destination.
+3. Build and run.
+4. For AI checks, install/start Ollama and pull the configured model, for example: `ollama pull qwen3.5:4b`.
+5. Start a session. The first local policy build may take a moment; subsequent checks avoid a model call for apps already in the policy.
 
-## Project structure
+## Current project tree
 
-| Area | Responsibility |
-| --- | --- |
-| `Nudge/App` | App entry point and root view routing between goal entry and active session. |
-| `Nudge/Views` | SwiftUI screens, menu-bar UI, and reusable visual components. |
-| `Nudge/Managers` | Session lifecycle, local persistence, context assembly, and scheduling. |
-| `Nudge/Services` | Activity, battery, lock/sleep, permission gating, notification, and screen-capture services. |
-| `Nudge/AI` | Ollama client and focus-analysis prompt flow. |
-| `Nudge/Models` | Goal, saved session, focus context/decision, and focus-state model types. |
-
-## Current file tree
-
-The tree below lists the project-owned source and resource files as of this README update. It intentionally omits per-user Xcode workspace state (`xcuserdata`) and Finder metadata (`.DS_Store`).
+The tree lists project-owned text/source/resources and omits Finder metadata and per-user Xcode state (`xcuserdata`). The existing folder name `Componets` is preserved exactly as it appears in the project.
 
 ```text
 Nudge/
-├── readme.md
+├── Nudge-README.md
 └── Nudge/
     ├── AI/
     │   ├── AIManager.swift
@@ -88,8 +80,8 @@ Nudge/
     │   ├── ContentView.swift
     │   └── NudgeApp.swift
     ├── Managers/
-    │   ├── ActivityManager.swift
     │   ├── ContextManager.swift
+    │   ├── HistoryStore.swift
     │   ├── Scheduler.swift
     │   ├── SessionManager.swift
     │   └── SettingsManager.swift
@@ -97,6 +89,7 @@ Nudge/
     │   ├── FocusCheck.swift
     │   ├── FocusContext.swift
     │   ├── FocusDecision.swift
+    │   ├── FocusPolicy.swift
     │   ├── FocusStatus.swift
     │   ├── Goal.swift
     │   ├── NudgeState.swift
@@ -115,11 +108,8 @@ Nudge/
     │   ├── BatteryMonitor.swift
     │   ├── CheckPermissionManager.swift
     │   ├── DeviceStateMonitor.swift
-    │   ├── FocusScheduler.swift
     │   ├── NotificationService.swift
-    │   ├── ScreenCaptureService.swift
-    │   ├── SleepMonitor.swift
-    │   └── Untitled.swift
+    │   └── ScreenCaptureService.swift
     └── Views/
         ├── Componets/
         │   ├── InfoRow.swift
@@ -133,112 +123,105 @@ Nudge/
         └── MenuBarView.swift
 ```
 
-### Root, app resources, and Xcode project
+### Root, app resources, and project configuration
 
-| Path | What it holds / does |
+| Path | Purpose |
 | --- | --- |
-| `readme.md` | Project overview, setup notes, implementation status, and this file guide. |
-| `Nudge/Nudge.xcodeproj` | Xcode project container: build configuration, target membership, and workspace metadata. |
-| `Nudge/Nudge.xcodeproj/project.pbxproj` | The project’s primary Xcode configuration, including build phases, source-file membership, bundle identifier, and deployment target. |
-| `Nudge/Nudge.xcodeproj/project.xcworkspace/contents.xcworkspacedata` | Minimal workspace descriptor Xcode uses to open the project context. |
-| `Nudge/Nudge` | App-bundle resources: configuration and compiled asset-catalog inputs. |
-| `Nudge/Nudge/Info.plist` | App property-list configuration, including App Transport Security settings. |
-| `Nudge/Nudge/Assets.xcassets` | Asset catalog supplied to the app at build time. |
-| `Nudge/Nudge/Assets.xcassets/Contents.json` | Asset catalog manifest. |
+| `Nudge-README.md` | This project overview, setup guide, feature inventory, and file map. |
+| `Nudge/readme.md` | Older minimal project README retained inside the Xcode project folder. |
+| `Nudge/Nudge.xcodeproj` | Xcode project container. |
+| `Nudge/Nudge.xcodeproj/project.pbxproj` | Target membership, build settings, automatic signing configuration, version `1.0`/build `1`, deployment target, and source build phases. Hardened Runtime is enabled and App Sandbox is disabled. |
+| `Nudge/Nudge.xcodeproj/project.xcworkspace/contents.xcworkspacedata` | Workspace descriptor used by Xcode. |
+| `Nudge/Nudge` | Files copied/compiled into the app bundle. |
+| `Nudge/Nudge/Info.plist` | Explicit App Transport Security configuration. |
+| `Nudge/Nudge/Assets.xcassets` | Xcode asset catalog. |
+| `Nudge/Nudge/Assets.xcassets/Contents.json` | Asset-catalog metadata. |
 | `Nudge/Nudge/Assets.xcassets/AccentColor.colorset/Contents.json` | Accent-color asset definition. |
-| `Nudge/Nudge/Assets.xcassets/AppIcon.appiconset/Contents.json` | App-icon set definition and image-slot metadata. |
+| `Nudge/Nudge/Assets.xcassets/AppIcon.appiconset/Contents.json` | Declares macOS icon slots; no image files are currently included in the repository. |
 
-### `AI` — local model integration
+### `AI` — policy building and local Ollama integration
 
-This folder is intended to contain the AI abstraction, prompts, routing, response parsing, and local-model client.
-
-| File | What it does now |
+| File | Purpose |
 | --- | --- |
-| `AIManager.swift` | Empty scaffold reserved for a high-level AI coordinator. |
-| `DecisionParser.swift` | Empty scaffold intended to parse model output into a `FocusDecision`. |
-| `FocusAnalyzer.swift` | Builds a focus-assessment prompt from `FocusContext` and sends it to `OllamaClient`. |
-| `ModelRouter.swift` | Empty scaffold reserved for selecting an AI model/provider. |
-| `OllamaClient.swift` | Sends a non-streaming request to local Ollama (`localhost:11434`) using `qwen3:0.6b` by default, then returns the raw response text. |
-| `PromptBuilder.swift` | Empty scaffold reserved for reusable prompt construction. |
+| `AIManager.swift` | Main actor coordinator. Builds/caches per-goal policies, evaluates current apps, learns unknown apps, and produces safe fallback decisions if Ollama is unavailable. |
+| `DecisionParser.swift` | Defines structured-output schemas/payloads, maps them to domain models, normalizes app names, and has defensive free-text fallback parsing. |
+| `FocusAnalyzer.swift` | Issues the two model jobs: policy expansion and one-app classification. |
+| `ModelRouter.swift` | Centralizes job-to-model selection; both current jobs use the user-configured model. |
+| `OllamaClient.swift` | Typed local HTTP client for Ollama `/api/generate`, with a 30-second timeout, JSON-schema output, error mapping, and 30-minute model keep-alive. |
+| `PromptBuilder.swift` | Constructs detailed prompts for goal policy expansion and conservative unknown-app classification. |
 
-### `App` — app composition and navigation
+### `App` — application entry and root navigation
 
-This folder contains the SwiftUI application entry point and root-level screen selection.
-
-| File | What it does now |
+| File | Purpose |
 | --- | --- |
-| `NudgeApp.swift` | Defines the `@main` app, creates the shared `SessionManager`, injects it into the main window, and creates the menu-bar extra. |
-| `ContentView.swift` | Switches between the goal-entry and active-session screens based on whether a session is running. |
+| `NudgeApp.swift` | `@main` SwiftUI app. Creates the shared session manager and exposes the main window plus menu-bar extra. |
+| `ContentView.swift` | Routes between goal entry and active session based on session state. |
 
-### `Managers` — application state and orchestration
+### `Managers` — lifecycle, persistence, and orchestration
 
-This folder is intended to own app-level lifecycles and coordinate services/models without putting that work directly in SwiftUI views.
-
-| File | What it does now |
+| File | Purpose |
 | --- | --- |
-| `ActivityManager.swift` | Empty scaffold reserved for higher-level activity orchestration. |
-| `ContextManager.swift` | Owns the monitor services and creates `FocusContext` from the active goal and current device/activity values. |
-| `Scheduler.swift` | Stores and adjusts the next-check time: five minutes initially or after distraction, up to 15 minutes after focused results. |
-| `SessionManager.swift` | Owns active-session state, elapsed-time timer, persistence to `UserDefaults`, start/stop behavior, scheduling, and current app state. |
-| `SettingsManager.swift` | Empty scaffold reserved for user preferences. |
+| `ContextManager.swift` | Owns monitor services and assembles their latest values into a `FocusContext`. |
+| `HistoryStore.swift` | Main-actor singleton that persists checks, completed-session count, and focus time to Application Support; calculates focus accuracy and retains 1,000 checks. |
+| `Scheduler.swift` | Owns the repeating timer, next-check date, callback, and adaptive minimum/maximum check interval. |
+| `SessionManager.swift` | Central session state machine. Starts/stops services, persists the resumable session, invokes AI checks, applies results, schedules future checks, records history, and triggers notifications. |
+| `SettingsManager.swift` | Main-actor `UserDefaults` settings store for model, notification flag, screenshot flag, and min/max check intervals. No settings UI consumes it yet. |
 
-### `Models` — small, shareable data types
+### `Models` — domain data types
 
-This folder holds the value types and enums exchanged by views, managers, services, and future AI logic.
-
-| File | What it does now |
+| File | Purpose |
 | --- | --- |
-| `FocusCheck.swift` | Defines one potential focus-check record: date, `FocusStatus`, and confidence. It is not yet persisted or displayed. |
-| `FocusContext.swift` | Defines the prompt context: goal, active application, idle time, battery level, charging state, and timestamp. |
-| `FocusDecision.swift` | Codable model for a parsed AI decision: focused/not focused, integer confidence, and reason. |
-| `FocusStatus.swift` | Defines `onTask`, `distracted`, and `unknown` focus-check statuses. |
-| `Goal.swift` | Identifiable active goal with title and creation date. |
-| `NudgeState.swift` | Defines app states (`idle`, `focused`, `checking`, `distracted`, `standby`) and their SF Symbol names. |
-| `SavedSession.swift` | Codable subset of a session persisted across launches: goal title, start date, and running flag. |
+| `FocusCheck.swift` | Codable/identifiable local history record: status, confidence, app, reason, date, and ID. Also supplies `FocusStatus` Codable/Equatable conformances. |
+| `FocusContext.swift` | Snapshot of a goal, frontmost app, idle/battery/charging values, and timestamp. |
+| `FocusDecision.swift` | Codable AI/policy/fallback decision with `focused`, confidence, reason, and source. |
+| `FocusPolicy.swift` | Codable per-goal normalized allow/block app sets; classifies an app and learns a new decision. |
+| `FocusStatus.swift` | Three history statuses: `onTask`, `distracted`, and `unknown`. |
+| `Goal.swift` | Active goal with UUID, title, and creation date. |
+| `NudgeState.swift` | UI states (`idle`, `focused`, `checking`, `distracted`, `standby`) and their SF Symbol icons. |
+| `SavedSession.swift` | Codable `UserDefaults` representation of a resumable session. |
 
-### `Services` — macOS and system integrations
+### `Services` — macOS integration points
 
-This folder is for focused integrations with macOS frameworks and background monitoring work.
-
-| File | What it does now |
+| File | Purpose |
 | --- | --- |
-| `ActivityMonitor.swift` | Every five seconds reads the frontmost app and mouse-idle duration. |
-| `BatteryMonitor.swift` | Reads power-source charge percentage and charging state through IOKit when initialized or explicitly updated. |
-| `CheckPermissionManager.swift` | Determines whether a focus check is allowed and exposes a human-readable reason; blocks checks while locked, sleeping, or below 15% battery. |
-| `DeviceStateMonitor.swift` | Observes screen lock/unlock and Mac sleep/wake notifications; exposes current lock and sleep state. |
-| `FocusScheduler.swift` | Unused duplicate scheduling scaffold with the same five-to-fifteen-minute interval logic as `Managers/Scheduler.swift`. |
-| `NotificationService.swift` | Empty scaffold reserved for macOS notification delivery. |
-| `ScreenCaptureService.swift` | Captures the first available display with ScreenCaptureKit and retains the latest screenshot for the UI preview. |
-| `SleepMonitor.swift` | Empty scaffold reserved for sleep-state monitoring. |
-| `Untitled.swift` | Empty placeholder file with no current behavior. |
+| `ActivityMonitor.swift` | Periodically reads the frontmost `NSWorkspace` app and mouse-idle duration. |
+| `BatteryMonitor.swift` | Reads IOKit power sources and monitors battery changes during a session. |
+| `CheckPermissionManager.swift` | Makes the check gate decision and explains why it is allowed or blocked. |
+| `DeviceStateMonitor.swift` | Observes lock/unlock and sleep/wake notifications, and removes its observers on deinitialization. |
+| `NotificationService.swift` | Requests notification permission and delivers distraction/completion notifications; distraction delivery is rate limited to one minute. |
+| `ScreenCaptureService.swift` | Captures the first display for test preview and can return a downscaled, compressed JPEG for future vision analysis. |
 
-### `Views` — SwiftUI interface
+### `Views` — SwiftUI screens and reusable presentation
 
-This folder holds the main screens and reusable SwiftUI presentation components. The existing subfolder is named `Componets` in the project (the spelling is preserved in the tree and imports).
-
-| File | What it does now |
+| File | Purpose |
 | --- | --- |
-| `ActiveSessionView.swift` | Shows the current goal, timer, next check, system/context rows, test-AI action, screenshot test/preview, and end-session button. |
-| `GoalEntryView.swift` | Presents goal input and start-session action; its summary statistics are currently placeholders. |
-| `MenuBarView.swift` | Top-level menu-bar content showing status, battery, and activity. |
-| `Views/Componets/InfoRow.swift` | Reusable two-line label/value row for system information. |
-| `Views/Componets/MenuBarStatusView.swift` | Menu-bar detail block showing current goal, session status/timer/next check, plus Open, Settings placeholder, and Quit actions. |
-| `Views/Componets/PrimaryButton.swift` | Empty scaffold reserved for a shared button style/component. |
-| `Views/Componets/SectionHeader.swift` | Reusable semibold section-title view. |
-| `Views/Componets/StatusBadge.swift` | Reusable text label with a colored circular status indicator. |
-| `Views/Componets/TimerView.swift` | Formats and displays elapsed session time as `MM:SS` or `HH:MM:SS`. |
+| `ActiveSessionView.swift` | Main running-session dashboard: timing, system context, latest focus decision, manual screenshot test/preview, and stop action. |
+| `GoalEntryView.swift` | Goal input/start screen and local-history statistics display. |
+| `MenuBarView.swift` | Menu-bar wrapper displaying status, battery, and activity. |
+| `Views/Componets/InfoRow.swift` | Reusable title/value detail row. |
+| `Views/Componets/MenuBarStatusView.swift` | Menu-bar controls: start/end session, current goal/state/timer/next check, open app, disabled settings placeholder, and quit. |
+| `Views/Componets/PrimaryButton.swift` | Reusable primary/destructive `ButtonStyle`. |
+| `Views/Componets/SectionHeader.swift` | Reusable semibold section title. |
+| `Views/Componets/StatusBadge.swift` | Label with a colored circular status indicator. |
+| `Views/Componets/TimerView.swift` | Displays a duration as `MM:SS` or `HH:MM:SS`. |
 
-## Known limitations and next work
+## Known limitations
 
-- Scheduled checks currently only calculate and display the next-check time; they do not fire a capture, AI request, or notification automatically.
-- The AI response is returned as raw text and is not yet parsed into `FocusDecision`, reflected in app state, or used to adapt the scheduler.
-- Screen capture is manual/test-only and is not included in the AI prompt.
-- The menu bar is status-only; it does not currently expose session controls.
-- The goal-entry statistics are placeholders (`0` sessions and `--` for accuracy/time).
-- Battery state is read when `BatteryMonitor` is initialized, rather than continuously refreshed.
-- `NotificationService`, `SleepMonitor`, `AIManager`, `ModelRouter`, `PromptBuilder`, `SettingsManager`, and `FocusScheduler` are currently scaffolds or not connected to the active flow.
-- No automated tests or release/packaging workflow are currently included.
+- There is no settings screen, even though `SettingsManager` persists configuration values.
+- `useScreenshots` is stored but not read; screen capture remains manual/test-only and no screenshot is sent to a model.
+- The raw context contains idle time and battery values, but current model prompts evaluate the goal and frontmost app only.
+- AI policy/decision cache uses `UserDefaults` and does not expire or expose a way to clear individual policies.
+- The project currently has no test target, release automation, packaged `.dmg`, or populated app-icon images.
+- Direct GitHub distribution should use a Developer ID-signed and notarized build; a locally built unsigned `.app` is appropriate only for development/testing.
 
-## Privacy
+## Privacy and local data
 
-Nudge is designed around local context and a local Ollama endpoint. The current implementation sends only the textual goal, app name, idle time, and battery percentage included in the prompt to `localhost`; it does not transmit captured screenshots through the AI client. Screen captures remain in memory as the latest preview during the running app session.
+Nudge’s AI client targets only local Ollama. Policy-generation requests send the goal; unknown-app classification requests send the goal and frontmost application name. The current app does not send screenshots, idle time, battery values, history, or session data to the model. Session/policy settings are stored in `UserDefaults`; history is stored in the user’s Application Support folder; test screenshots remain in memory as `latestScreenshot` during the process.
+
+## Releasing a `.dmg` on GitHub
+
+Before publishing, create a **Developer ID Application** certificate in the Apple Developer account used by this project. The project already enables Hardened Runtime, which notarization needs; set the release signing identity to that Developer ID certificate and make sure the bundle ID and version/build numbers are final.
+
+The friendliest first release workflow is Xcode’s **Product → Archive**, then **Window → Organizer → Distribute App → Developer ID → Upload**. Let Xcode sign and notarize the archive, then export the notarized app. Create a drag-and-drop DMG containing that exported `.app`, validate it on another Mac, and attach it to a GitHub Release using a version tag such as `v1.0.0`.
+
+For automation, the equivalent stages are: archive the Release build; export it with Developer ID signing; create the DMG with `hdiutil`; submit it using `xcrun notarytool submit ... --wait`; staple the result with `xcrun stapler staple`; verify it with `spctl --assess`; then upload the DMG and a SHA-256 checksum as GitHub Release assets. Do not publish the DMG until notarization and verification pass.
